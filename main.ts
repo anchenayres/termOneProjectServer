@@ -27,9 +27,22 @@ mongoose.connect(clusterUrl!).then(() => {
     console.log(error.message)
 });
 
-//endpoints
+//endpoints - optional to have endpoints in a seperate route files
 app.get("/", (req, res) => {
     res.send("Working Server");
+})
+
+//INVENTORY CRUD calls
+app.get("/inventory", async (req, res) => {
+    const inventory = await InventoryModel.find({});
+    res.send(inventory);
+})
+
+app.post("/inventory", async (req, res) => {
+    const {image, title, category, description, availability} = req.body;
+
+    const inventory = await InventoryModel.create({image, title, category, description, availability});
+    res.send(inventory);
 })
 
 //listener
