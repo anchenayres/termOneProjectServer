@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
 
+//Import Models
+import { InventoryModel } from "./models/inventory";
+
+
 dotenv.config();
 
 const app: Express = express();
