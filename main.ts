@@ -33,11 +33,14 @@ app.get("/", (req, res) => {
 })
 
 //INVENTORY CRUD calls
+
+//view all
 app.get("/inventory", async (req, res) => {
     const inventory = await InventoryModel.find({});
     res.send(inventory);
 })
 
+//add a new item
 app.post("/inventory", async (req, res) => {
     const {image, title, category, description, availability} = req.body;
 
@@ -55,6 +58,7 @@ app.put("/inventory/:id", async (req, res) => {
     res.send(inventory);
 })
 
+//delete
 app.delete("/inventory/:id", async (req, res) => {
     const { id } = req.params
 
