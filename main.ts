@@ -45,6 +45,26 @@ app.post("/inventory", async (req, res) => {
     res.send(inventory);
 })
 
+//update availability
+app.put("/inventory/:id", async (req, res) => {
+    const { id } = req.params
+    const { availability } = req.body;
+
+    const inventory = await InventoryModel.findByIdAndUpdate(id, { availability }, {new: true})
+
+    res.send(inventory);
+})
+
+app.delete("/inventory/:id", async (req, res) => {
+    const { id } = req.params
+
+    const inventory = await InventoryModel.findByIdAndDelete(id)
+
+    res.send(inventory);
+})
+
+
+
 //listener
 app.listen(port, () => {
     console.log("[server: Server running at http://localhost:" + port);
