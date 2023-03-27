@@ -18,7 +18,7 @@ const clusterUrl = process.env.CLUSTER;
 //establish our mongodb connection
 mongoose.set('strictQuery', false);
 mongoose.connect(clusterUrl!).then(() => {
-    console.log("Connected Successfully")
+    console.log("Connected Successfully to MongoDB")
 }).catch((error) => {
     console.log(error.message)
 });
