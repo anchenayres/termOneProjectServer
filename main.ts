@@ -1,9 +1,8 @@
 import express, { Express } from "express";
+import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-
-//TODO: Import our Typegoose and Mongoose to connect to db
 dotenv.config();
 
 const app: Express = express();
@@ -14,6 +13,15 @@ app.use(express.json()); //to get our params from body
 
 //declare variables
 const port = process.env.PORT || 3000;
+const clusterUrl = process.env.CLUSTER;
+
+//establish our mongodb connection
+mongoose.set('strictQuery', false);
+mongoose.connect(clusterUrl!).then(() => {
+    console.log("Connected Successfully")
+}).catch((error) => {
+    console.log(error.message)
+});
 
 //endpoints
 app.get("/", (req, res) => {
