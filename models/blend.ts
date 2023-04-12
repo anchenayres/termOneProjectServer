@@ -15,7 +15,7 @@ export class Blend {
     public description?: string
 
     @prop()
-    public amount?: number
+    public availability?: number
 
     //array of all ingredients needed from inventory
     @prop({type: () => [Ingredient], required: true})

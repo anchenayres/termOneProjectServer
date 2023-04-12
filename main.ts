@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 //Import Models
 import { InventoryModel } from "./models/inventory";
 import { UserModel } from "./models/user";
-import { Blend } from "./models/blend";
+import { Blend, BlendModel } from "./models/blend";
 
 
 dotenv.config();
@@ -124,25 +124,38 @@ app.post('/blend/create', async (req, res) => {
     const blendData = [
         {
             image: "assets/background.png",
-            name: "Hammer",
+            name: "African Blend 1",
             description: "Use me to nail things.",
-            amount: 0,
+            availability: 0,
             ingredients: [
-                {inventoryId: "", amountNeeded: ""}
+                {inventoryId: "6422151e47444eb4a80f2478", amountNeeded: 20},
+                {inventoryId: "6436e88ef3e53f1cd2a7fba0", amountNeeded: 35},
             ]
         },
         {
             image: "assets/background.png",
-            name: "Saw",
+            name: "African Blend 2",
             description: "Use me to make one thing.",
-            amount: 0,
-            ingredients: []
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6436e971f3e53f1cd2a7fba5", amountNeeded: 10},
+                {inventoryId: "6436e935f3e53f1cd2a7fba3", amountNeeded: 15},
+            ]
         }
 
     ]
+
+    for (const blend of blendData) {
+        await BlendModel.create(blend);
+    }
+    res.send({success: true});
 })
 
-
+//get all of my blends
+app.get("/blend", async (req, res) => {
+    const blend = await BlendModel.find().populate("ingredients.inventoryId").exec();
+    res.send(blend)
+})
 
 
 
