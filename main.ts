@@ -5,7 +5,7 @@ import cors from 'cors';
 import bcrypt from 'bcryptjs';
 
 //Import Models
-import { InventoryModel } from "./models/inventory";
+import { Inventory, InventoryModel } from "./models/inventory";
 import { UserModel } from "./models/user";
 import { Blend, BlendModel } from "./models/blend";
 import { Ingredient } from "./models/ingredient";
@@ -30,6 +30,9 @@ mongoose.connect(clusterUrl!).then(() => {
 }).catch((error) => {
     console.log(error.message)
 });
+
+
+
 
 //AUTH ENDPOINTS
 app.post("/user/signup", async (req, res) => {
@@ -91,6 +94,30 @@ app.get("/inventory", async (req, res) => {
     const inventory = await InventoryModel.find({});
     res.send(inventory);
 })
+
+
+
+// app.get("/inventory/category/:Africa", async (req, res) => {
+//     const inventory = req.params
+
+//     const category = await BlendModel.find().populate("inventory.category").exec();
+
+//     res.send(inventory);
+// })
+
+
+
+
+
+// const newData = inventory.filter(function(category) {
+//     if (!category.tags) {
+//       return
+//     }
+//     return category.tags.includes("");
+//   });
+//   console.log(newData);
+
+
 
 //add a new item
 app.post("/inventory", async (req, res) => {
@@ -205,6 +232,9 @@ app.post('/blend/craft', async (req, res) => {
         res.status(500).send({error: err});
     }
 })
+
+
+
 
 //listener
 app.listen(port, () => {
