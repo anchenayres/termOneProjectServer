@@ -173,6 +173,38 @@ app.get("/blend", async (req, res) => {
 })
 
 //endpoint to craft blend (check if enough items)
+app.post('/blend/craft', async (req, res) => {
+
+    try {
+        const { blendId } = req.body;
+
+        const blend = await BlendModel.findById(blendId).exec();
+
+        if(blend){ //check if recipe been found
+            blend.availability!++ //incrementing blending amount
+            blend.save()
+    
+            //UPDATE INVENTORY AMOUNT
+            const ingredients = blend.ingredients!
+            for(const ingredient of ingredients) {
+                const inventoryId = ingredient.inventoryId
+                const inventory = await InventoryModel.findById(inventoryId).exec();
+                if(inventory) {
+                    inventory.availability! -=ingredient.amountNeeded! //remove the amount that was needed
+                    await inventory.save()
+                }
+            }
+    
+        }
+
+
+
+        res.send({success: true})
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({error: err});
+    }
+})
 
 //listener
 app.listen(port, () => {
