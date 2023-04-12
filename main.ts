@@ -2,9 +2,11 @@ import express, { Express } from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
+import bcrypt from 'bcryptjs';
 
 //Import Models
 import { InventoryModel } from "./models/inventory";
+import { UserModel } from "./models/user";
 
 
 dotenv.config();
@@ -31,6 +33,14 @@ mongoose.connect(clusterUrl!).then(() => {
 app.post("/user/signup", async (req, res) => {
 
     try {
+
+        let { username, password, role } = req.body
+        //Hash password
+        password = await bcrypt.hash(password, 10)
+        //Create new user
+        const user = await UserModel.create({ username, password, role })
+
+        res.json(user);
 
     } catch (error) {
         res.status(400).json({error});
