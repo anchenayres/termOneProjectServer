@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 //Import Models
 import { InventoryModel } from "./models/inventory";
 import { UserModel } from "./models/user";
+import { Blend } from "./models/blend";
 
 
 dotenv.config();
@@ -116,6 +117,32 @@ app.delete("/inventory/:id", async (req, res) => {
 
     res.send(inventory);
 })
+
+//Blend data handling - post endpoint for recipes (BLENDS) - comment out when done
+//used to poplulate database
+app.post('/blend/create', async (req, res) => {
+    const blendData = [
+        {
+            image: "assets/background.png",
+            name: "Hammer",
+            description: "Use me to nail things.",
+            amount: 0,
+            ingredients: [
+                {inventoryId: "", amountNeeded: ""}
+            ]
+        },
+        {
+            image: "assets/background.png",
+            name: "Saw",
+            description: "Use me to make one thing.",
+            amount: 0,
+            ingredients: []
+        }
+
+    ]
+})
+
+
 
 
 

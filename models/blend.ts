@@ -1,6 +1,9 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import {Ingredient} from './ingredient';
 
-class Blend {
+//Armand RECIPE.TS
+
+export class Blend {
 
     @prop({required: true})
     public name?: string
@@ -15,8 +18,8 @@ class Blend {
     public amount?: number
 
     //array of all ingredients needed from inventory
-    @prop()
-    public ingredients?: []
+    @prop({type: () => [Ingredient], required: true})
+    public ingredients?: Ingredient[]
 
 
 }

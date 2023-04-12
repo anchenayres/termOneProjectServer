@@ -2,7 +2,7 @@ import {prop, getModelForClass} from '@typegoose/typegoose'
 
 
 //create our model class
-class Inventory {
+export class Inventory {
     @prop({required: true})
     public image?: string;
 
