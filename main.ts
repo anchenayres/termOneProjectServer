@@ -48,7 +48,32 @@ app.post("/user/signup", async (req, res) => {
 })
 
 app.post("/user/login", async (req, res) => {
-    
+    try {
+
+        //Get variables
+        const { username, password } = req.body
+        //Check does this user exist
+        const user = await UserModel.findOne({ username: username })
+
+        if(user) {
+            //check if password matches if user exists
+            const result = await bcrypt.compare( password,user.password! );
+            //if the result is true
+            if(result) {
+                //optional: JWT token
+                res.json({success: true})
+            } else {
+                res.status(400).json({error: "Invalid Password"});
+            }
+
+        } else {
+            res.status(400).json({error: "User does not exist"})
+        }
+
+    } catch (error) {
+        res.status(400).json({error});
+    }
+
 })
 
 
