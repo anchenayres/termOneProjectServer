@@ -8,6 +8,7 @@ import bcrypt from 'bcryptjs';
 import { InventoryModel } from "./models/inventory";
 import { UserModel } from "./models/user";
 import { Blend, BlendModel } from "./models/blend";
+import { Ingredient } from "./models/ingredient";
 
 
 dotenv.config();
@@ -119,45 +120,59 @@ app.delete("/inventory/:id", async (req, res) => {
 })
 
 //Blend data handling - post endpoint for recipes (BLENDS) - comment out when done
+
 //used to poplulate database
-app.post('/blend/create', async (req, res) => {
-    const blendData = [
-        {
-            image: "assets/background.png",
-            name: "African Blend 1",
-            description: "Use me to nail things.",
-            availability: 0,
-            ingredients: [
-                {inventoryId: "6422151e47444eb4a80f2478", amountNeeded: 20},
-                {inventoryId: "6436e88ef3e53f1cd2a7fba0", amountNeeded: 35},
-            ]
-        },
-        {
-            image: "assets/background.png",
-            name: "African Blend 2",
-            description: "Use me to make one thing.",
-            availability: 0,
-            ingredients: [
-                {inventoryId: "6436e971f3e53f1cd2a7fba5", amountNeeded: 10},
-                {inventoryId: "6436e935f3e53f1cd2a7fba3", amountNeeded: 15},
-            ]
-        }
+// app.post('/blend/create', async (req, res) => {
+//     const blendData = [
+//      ]
 
-    ]
-
-    for (const blend of blendData) {
-        await BlendModel.create(blend);
-    }
-    res.send({success: true});
-})
+//     for (const blend of blendData) {
+//         await BlendModel.create(blend);
+//     }
+//     res.send({success: true});
+// })
 
 //get all of my blends
 app.get("/blend", async (req, res) => {
-    const blend = await BlendModel.find().populate("ingredients.inventoryId").exec();
-    res.send(blend)
+    try {
+        const blend = await BlendModel.find().populate("ingredients.inventoryId").exec();
+
+        //endpoint to craft blend (check if enough items to craft blend, hide button if not blendable)
+
+        const blendWithAvailability =  await Promise.all(
+            blend.map(async (blend) => {
+                //1. loop through each blend
+                const ingredient = blend.ingredients;
+                let craftable = true;
+    
+                //2. loop through each ingredient to check availability
+                for (const ingredients of ingredient!) {
+                    //2.1 get inventory data for each ingredient
+                    const inventory = await InventoryModel.findById(ingredients.inventoryId).exec();
+                    //2.2 get amount available
+                    const availability = inventory!.availability
+                    //2.3 check availability
+                    if(!availability || availability < ingredients.amountNeeded!){
+                        craftable = false;
+                        break;
+                    }
+                }
+                //3. return the blend with new craftable property
+                return { ...blend.toObject(), craftable }
+            })
+
+        )
+
+        console.log(blendWithAvailability)
+        //4. respond new blend
+        res.send(blendWithAvailability)
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({error: "Internal server error"})
+        }
 })
 
-
+//endpoint to craft blend (check if enough items)
 
 //listener
 app.listen(port, () => {
