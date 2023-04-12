@@ -27,6 +27,21 @@ mongoose.connect(clusterUrl!).then(() => {
     console.log(error.message)
 });
 
+//AUTH ENDPOINTS
+app.post("/user/signup", async (req, res) => {
+
+    try {
+
+    } catch (error) {
+        res.status(400).json({error});
+    }
+})
+
+app.post("/user/login", async (req, res) => {
+    
+})
+
+
 //endpoints - optional to have endpoints in a seperate route files
 app.get("/", (req, res) => {
     res.send("Working Server");
