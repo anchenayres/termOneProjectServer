@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 
+
 //Import Models
 import { Inventory, InventoryModel } from "./models/inventory";
 import { UserModel } from "./models/user";
@@ -96,29 +97,6 @@ app.get("/inventory", async (req, res) => {
 })
 
 
-
-// app.get("/inventory/category/:Africa", async (req, res) => {
-//     const inventory = req.params
-
-//     const category = await BlendModel.find().populate("inventory.category").exec();
-
-//     res.send(inventory);
-// })
-
-
-
-
-
-// const newData = inventory.filter(function(category) {
-//     if (!category.tags) {
-//       return
-//     }
-//     return category.tags.includes("");
-//   });
-//   console.log(newData);
-
-
-
 //add a new item
 app.post("/inventory", async (req, res) => {
     const {image, title, category, description, availability} = req.body;
@@ -159,6 +137,7 @@ app.delete("/inventory/:id", async (req, res) => {
 //     res.send({success: true});
 // })
 
+
 //get all of my blends
 app.get("/blend", async (req, res) => {
     try {
@@ -177,11 +156,20 @@ app.get("/blend", async (req, res) => {
                     //2.1 get inventory data for each ingredient
                     const inventory = await InventoryModel.findById(ingredients.inventoryId).exec();
                     //2.2 get amount available
-                    const availability = inventory!.availability
+                    let availability 
+                    if (inventory?.availability) {
+                     availability = inventory!.availability
+                     console.log(inventory.title)
+
+                    } else {
+                        console.log(inventory)
+                    }
+                    // console.log(availability)
                     //2.3 check availability
                     if(!availability || availability < ingredients.amountNeeded!){
                         craftable = false;
                         break;
+                        
                     }
                 }
                 //3. return the blend with new craftable property
@@ -198,6 +186,22 @@ app.get("/blend", async (req, res) => {
             res.status(500).json({error: "Internal server error"})
         }
 })
+
+// app.post('/blend/create', async (req, res) => {
+//     const blendData = [
+//         {
+//             image: "assets/background.png",
+//             name: "African Blend 3",
+//             description: "Fruity aroma with bitter taste",
+//             availability: 0,
+//             ingredients: [
+//                 {inventoryId: "6422151e47444eb4a80f2478", amountNeeded: 20},
+//                 {inventoryId: "6437a872e9a1cb2df64acf2b", amountNeeded: 35},
+//             ]
+//         },
+//         ]
+//         })
+
 
 //endpoint to craft blend (check if enough items)
 app.post('/blend/craft', async (req, res) => {
@@ -223,9 +227,6 @@ app.post('/blend/craft', async (req, res) => {
             }
     
         }
-
-
-
         res.send({success: true})
     } catch (error) {
         console.log(error)
