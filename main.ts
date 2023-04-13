@@ -188,20 +188,64 @@ app.get("/blend", async (req, res) => {
         }
 })
 
-// app.post('/blend/create', async (req, res) => {
-//     const blendData = [
-//         {
-//             image: "assets/background.png",
-//             name: "African Blend 3",
-//             description: "Fruity aroma with bitter taste",
-//             availability: 0,
-//             ingredients: [
-//                 {inventoryId: "6422151e47444eb4a80f2478", amountNeeded: 20},
-//                 {inventoryId: "6437a872e9a1cb2df64acf2b", amountNeeded: 35},
-//             ]
-//         },
-//         ]
-//         })
+app.post('/blend/create', async (req, res) => {
+    const blendData = [
+        {
+            image: "assets/light2.webp",
+            name: "Freshness in a Bag",
+            description: "Lemongrass undertones with a fruity acidity",
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6437aefbe9a1cb2df64acf72", amountNeeded: 30},
+                {inventoryId: "6437ae95e9a1cb2df64acf6e", amountNeeded: 55},
+            ]
+        },
+        {
+            image: "assets/light2.webp",
+            name: "Oh So Sweet",
+            description: "Contradicting taste of honey with a bitter undertone",
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6437ae26e9a1cb2df64acf6a", amountNeeded: 15},
+                {inventoryId: "6437ad8fe9a1cb2df64acf66", amountNeeded: 86},
+            ]
+        },
+        {
+            image: "assets/light2.webp",
+            name: "Wake Me Up",
+            description: "Enjoyable as pure black coffee with fruity undertones",
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6437ad39e9a1cb2df64acf62", amountNeeded: 60},
+                {inventoryId: "6437acd6e9a1cb2df64acf5e", amountNeeded: 10},
+            ]
+        },
+        {
+            image: "assets/light2.webp",
+            name: "Rest in Peace",
+            description: "Decafinated with earthy, creamy undertones",
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6437ac92e9a1cb2df64acf5a", amountNeeded: 46},
+                {inventoryId: "6437abcde9a1cb2df64acf51", amountNeeded: 47},
+            ]
+        },
+        {
+            image: "assets/light2.webp",
+            name: "You've Got Company",
+            description: "Chocolate and nutty delight with fruity acidity",
+            availability: 0,
+            ingredients: [
+                {inventoryId: "6437ab58e9a1cb2df64acf4a", amountNeeded: 74},
+                {inventoryId: "6437a9bbe9a1cb2df64acf3e", amountNeeded: 10},
+            ]
+        },
+        ]
+        for(const blend of blendData){
+            await BlendModel.create(blend);
+        }
+        res.send({success: true});
+        })
 
 
 //endpoint to craft blend (check if enough items)
