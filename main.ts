@@ -227,9 +227,9 @@ app.post('/blend/craft', async (req, res) => {
 
 
         res.send({success: true})
-    } catch (err) {
-        console.log(err)
-        res.status(500).send({error: err});
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error: error});
     }
 })
 
