@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 
 //Import Models
 import { Inventory, InventoryModel } from "./models/inventory";
+import { Africa, AfricaModel } from "./models/africa";
 import { UserModel } from "./models/user";
 import { Blend, BlendModel } from "./models/blend";
 import { Ingredient } from "./models/ingredient";
@@ -234,7 +235,92 @@ app.post('/blend/craft', async (req, res) => {
     }
 })
 
+//africa
+app.get("/africa", async (req, res) => {
+    const { id } = req.body;
+    const { category } = req.body;
 
+    const categoryValue = "Africa"
+    
+    const africa = await AfricaModel.find({categry:categoryValue})
+    res.send(africa);
+})
+
+//view all
+// app.get("/africa", async (req, res) => {
+    
+//     const {africaId} = req.body;
+
+//     const category = "Africa"
+
+//     const africa = await AfricaModel.findById(africaId).exec();
+//     res.send(africa);
+//     console.log(category)
+// }
+// )
+
+// app.get("/africa", async (req, res) => {
+    
+//     try{
+//         const africa = await AfricaModel.find().populate("category.africaId").exec();
+
+//        const africaAvailable = await Promise.all(
+//         africa.map(async (africa)=>{
+//             const category = africa.category;
+
+//             for(const af of category!){
+//                 const africa = await AfricaModel.findById(af).exec();
+//                 let avail
+//                 if(africa?.category){
+//                     avail = africa!.category
+//                     console.log(category)
+//                 } else {
+//                     console.log(africa)
+//                 }
+//             }
+//         })
+//        ) 
+
+//     }catch(error)  {
+//         console.log(error)
+//     }
+// }
+// )
+
+
+
+// for (const ingredients of ingredient!) {
+//     //2.1 get inventory data for each ingredient
+//     const inventory = await InventoryModel.findById(ingredients.inventoryId).exec();
+//     //2.2 get amount available
+//     let availability 
+//     if (inventory?.availability) {
+//      availability = inventory!.availability
+//      console.log(inventory.title)
+
+//     } else {
+//         console.log(inventory)
+//     }
+//     // console.log(availability)
+//     //2.3 check availability
+//     if(!availability || availability < ingredients.amountNeeded!){
+//         craftable = false;
+//         break;
+        
+//     }
+
+
+        
+
+
+//add a new item
+app.post("/africa", async (req, res) => {
+    const {image, title, category, description, availability} = req.body;
+
+    const africa = await AfricaModel.create({image, title, category, description, availability});
+    res.send(africa);
+    
+})
 
 
 //listener
